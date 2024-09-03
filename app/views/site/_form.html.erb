@@ -1,0 +1,6 @@
+<%= form_with url: "/generate", method: :post do |f| %>
+
+  <%= f.text_field :long_url, placeholder: "Enter URL" %>
+  <%= f.submit "generate"%>
+
+<% end %>

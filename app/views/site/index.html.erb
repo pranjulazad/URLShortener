@@ -1,0 +1,9 @@
+<h1>Generate Short URL</h1>
+
+<%= render partial: 'form' %>
+
+<%= debug flash %>
+
+<% if flash["validation_errors"].present?%>
+  <%= flash["validation_errors"].first %>
+<% end %>

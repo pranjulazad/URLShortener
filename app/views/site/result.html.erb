@@ -1,0 +1,6 @@
+<%= "Here is the short URL" %>
+<% if request.params["code"].present?%>
+  <h3><%= "http://localhost:3000/#{request.params["code"]}"%></h3>
+<%end%>
+
+<%= link_to "Dashboard", {:controller => "site", :action => "dashboard"} %>

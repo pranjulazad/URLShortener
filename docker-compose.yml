@@ -1,0 +1,66 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:8.3.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'test_store_production'
+      # So you don't have to use root, but you can if you like
+      #MYSQL_USER: 'root'
+      # You can use whatever password you like
+      #MYSQL_PASSWORD: 'amagi123'
+      MYSQL_ROOT_PASSWORD: 'amagi123'
+    ports:
+      # <Port exposed> : <MySQL Port running inside container>
+      - '3306:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+      # Where our data will be persisted
+    volumes:
+      - mysql-db:/var/lib/mysql
+  redis:
+    image: redis:7.0
+    container_name: redis
+    volumes:
+      - redis-store:/var/lib/redis/data
+    ports:
+      - "6379:6379"
+  teststore:
+    build:
+      context: .
+    volumes:
+      - .:/teststore
+    links:
+      - redis
+      - mysql
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+#  teststore:
+#    image: teststore:1.0.0
+#    volumes:
+#      - ./TestStore:/teststore
+#    links:
+#      - redis
+#      - mysql
+#    ports:
+#      - '3000:3000'
+#    env_file:
+#      - .env
+  nginx:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.nginx
+    links:
+      - teststore
+    ports:
+      - '8020:8020'
+
+volumes:
+  redis-store:
+  mysql-db:
+
